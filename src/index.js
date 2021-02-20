@@ -12,7 +12,7 @@ async function load_model() {
   // You can choose whatever IP and PORT you want in the "http://127.0.0.1:8080/model.json" just set it before in your https server
   //const model = await loadGraphModel("http://127.0.0.1:8080/model.json");
   const model = await loadGraphModel(
-    "https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
+    "https://raw.githubusercontent.com/souvikwohlig/image_classifier_diamond/main/assets/model.json"
   );
   return model;
 }
@@ -164,7 +164,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Real-Time Object Detection: Kangaroo</h1>
+        <h1>Real-Time Object Detection: Diamonds</h1>
         <h3>MobileNetV2</h3>
         <video
           style={{ height: "600px", width: "500px" }}
