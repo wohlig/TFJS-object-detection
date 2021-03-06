@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import * as tf from "@tensorflow/tfjs";
 import _ from "lodash";
@@ -7,7 +7,6 @@ import "./styles.css";
 tf.setBackend("webgl");
 
 const threshold = 0.4;
-var startTime = moment();
 
 // async function load_model() {
 //   const model = await loadGraphModel(
@@ -67,7 +66,6 @@ class App extends React.Component {
 
   detectFrame = (video, model) => {
     tf.engine().startScope();
-    startTime = moment();
     model.executeAsync(this.process_input(video)).then((prediction) => {
       var boxes = prediction[2].dataSync();
       boxes = _.map(boxes, function(value) {
@@ -91,7 +89,6 @@ class App extends React.Component {
       this.setState({ count: finalResponse.length });
       this.renderPredictions(finalResponse, video);
       requestAnimationFrame(() => {
-        startTime = moment();
         var reactApp = this;
         reactApp.detectFrame(video, model);
       });
