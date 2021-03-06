@@ -146,6 +146,22 @@ class App extends React.Component {
       ctx.strokeStyle = "#00FFFF";
       ctx.lineWidth = 2;
       ctx.strokeRect(x, y, width, height);
+
+      // Draw the label background.
+      ctx.fillStyle = "#00FFFF";
+      const textWidth = ctx.measureText((100 * item["score"]).toFixed(2) + "%")
+        .width;
+      const textHeight = parseInt(font, 10); // base 10
+      ctx.fillRect(x, y, textWidth + 4, textHeight + 4);
+    });
+
+    detections.forEach((item) => {
+      const x = item["bbox"][0];
+      const y = item["bbox"][1];
+
+      // Draw the text last to ensure it's on top.
+      ctx.fillStyle = "#000000";
+      ctx.fillText((100 * item["score"]).toFixed(2) + "%", x, y);
     });
   };
 
