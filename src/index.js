@@ -85,6 +85,7 @@ class App extends React.Component {
       finalResponse = _.filter(finalResponse, function(obj) {
         return obj.score >= threshold;
       });
+      console.log(finalResponse);
       this.setState({ count: finalResponse.length });
       this.renderPredictions(finalResponse, video);
       requestAnimationFrame(() => {
@@ -118,7 +119,6 @@ class App extends React.Component {
       bbox[2] = maxX - minX;
       bbox[3] = maxY - minY;
       return {
-        label: "Diamond",
         score: obj.score,
         bbox: bbox,
       };
@@ -146,29 +146,8 @@ class App extends React.Component {
 
       // Draw the bounding box.
       ctx.strokeStyle = "#00FFFF";
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 2;
       ctx.strokeRect(x, y, width, height);
-
-      // Draw the label background.
-      ctx.fillStyle = "#00FFFF";
-      const textWidth = ctx.measureText(
-        item["label"] + " " + (100 * item["score"]).toFixed(2) + "%"
-      ).width;
-      const textHeight = parseInt(font, 10); // base 10
-      ctx.fillRect(x, y, textWidth + 4, textHeight + 4);
-    });
-
-    detections.forEach((item) => {
-      const x = item["bbox"][0];
-      const y = item["bbox"][1];
-
-      // Draw the text last to ensure it's on top.
-      ctx.fillStyle = "#000000";
-      ctx.fillText(
-        item["label"] + " " + (100 * item["score"]).toFixed(2) + "%",
-        x,
-        y
-      );
     });
   };
 
@@ -176,24 +155,24 @@ class App extends React.Component {
     return (
       <div>
         <h1>Terracor Real-Time Diamond Count</h1>
+        <h5>Count: {this.state.count} </h5>
         <video
-          style={{ height: "600px", width: "500px" }}
+          style={{ height: "500px", width: "500px" }}
           className="size"
           autoPlay
           playsInline
           muted
           ref={this.videoRef}
-          width="320"
-          height="320"
+          width="500"
+          height="500"
           id="frame"
         />
         <canvas
           className="size"
           ref={this.canvasRef}
-          width="320"
-          height="320"
+          width="500"
+          height="500"
         />
-        <h5>Count: {this.state.count} </h5>
       </div>
     );
   }
