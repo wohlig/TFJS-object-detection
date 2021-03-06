@@ -94,14 +94,6 @@ class App extends React.Component {
       });
       console.log("TOTAL DETECTION:", finalResponse.length);
       // console.log("TOTAL DETECTION:",finalResponse.length)
-      var i;
-      for (i = 0; i < finalResponse.length; i++) {
-        console.log(
-          "Diamond " + (i + 1) + " with Score: " + finalResponse[i].score
-        );
-        console.log("Box Coordinates:" + finalResponse[i].box);
-        console.log("------------------------------------");
-      }
 
       console.log(
         "Response Time: ",
@@ -112,7 +104,10 @@ class App extends React.Component {
       // this.renderPredictions(prediction, video);
       requestAnimationFrame(() => {
         startTime = moment();
-        this.detectFrame(video, model);
+        var reactApp = this;
+        setTimeout(function() {
+          reactApp.detectFrame(video, model);
+        }, 2000);
       });
       tf.engine().endScope();
     });
