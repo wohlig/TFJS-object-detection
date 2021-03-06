@@ -16,7 +16,7 @@ const threshold = 0.02;
 
 async function load_model() {
   const model = await loadGraphModel(
-    "models/diamond-detector/model.json"
+    "https://raw.githubusercontent.com/wohlig/TFJS-object-detection/master/models/diamond-detector/model.json"
   );
   return model;
 }
