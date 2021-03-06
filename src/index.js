@@ -7,9 +7,16 @@ tf.setBackend("webgl");
 
 const threshold = 0.02;
 
+// async function load_model() {
+//   const model = await loadGraphModel(
+//     "https://raw.githubusercontent.com/souvikwohlig/image_classifier_diamond/main/assets/model.json"
+//   );
+//   return model;
+// }
+
 async function load_model() {
   const model = await loadGraphModel(
-    "https://raw.githubusercontent.com/souvikwohlig/image_classifier_diamond/main/assets/model.json"
+    "models/diamond-detector/model.json"
   );
   return model;
 }
