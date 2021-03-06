@@ -38,7 +38,7 @@ class App extends React.Component {
         .getUserMedia({
           audio: false,
           video: {
-            facingMode: { exact: "environment" },
+            facingMode: "environment",
             width: 800,
             height: 600,
           },
