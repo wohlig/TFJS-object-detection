@@ -91,9 +91,7 @@ class App extends React.Component {
       requestAnimationFrame(() => {
         startTime = moment();
         var reactApp = this;
-        setTimeout(function() {
-          reactApp.detectFrame(video, model);
-        }, 2000);
+        reactApp.detectFrame(video, model);
       });
       tf.engine().endScope();
     });
