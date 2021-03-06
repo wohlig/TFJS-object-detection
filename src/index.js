@@ -5,20 +5,26 @@ import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import "./styles.css";
 tf.setBackend("webgl");
 
-const threshold = 0.75;
+const threshold = 0.02;
 
 async function load_model() {
+<<<<<<< HEAD
   // It's possible to load the model locally or from a repo
   // You can choose whatever IP and PORT you want in the "http://127.0.0.1:8080/model.json" just set it before in your https server
   //const model = await loadGraphModel("http://127.0.0.1:8080/model.json");
   const model = await loadGraphModel(
     "https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
+=======
+  const model = await loadGraphModel(
+    "https://raw.githubusercontent.com/souvikwohlig/image_classifier_diamond/main/assets/model.json"
+>>>>>>> 933c37e94a19bbfa31e8168a5e359831f26aa01a
   );
   return model;
 }
 
 let classesDir = {
   1: {
+<<<<<<< HEAD
     name: "Kangaroo",
     id: 1,
   },
@@ -26,6 +32,11 @@ let classesDir = {
     name: "Other",
     id: 2,
   },
+=======
+    name: "diamond",
+    id: 1,
+  },
+>>>>>>> 933c37e94a19bbfa31e8168a5e359831f26aa01a
 };
 
 class App extends React.Component {
@@ -164,7 +175,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>TerraCor Diamond Detection</h1>
+        <h1>Terracor Real-Time Diamond Count</h1>
         <video
           style={{ height: "600px", width: "500px" }}
           className="size"
