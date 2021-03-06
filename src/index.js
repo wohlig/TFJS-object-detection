@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import * as tf from "@tensorflow/tfjs";
 import _ from "lodash";
@@ -8,7 +8,6 @@ tf.setBackend("webgl");
 
 const threshold = 0.4;
 var startTime = moment();
-var diamondcount = 0;
 
 // async function load_model() {
 //   const model = await loadGraphModel(
@@ -24,16 +23,15 @@ async function load_model() {
   return model;
 }
 
-let classesDir = {
-  1: {
-    name: "diamond",
-    id: 1,
-  },
-};
-
 class App extends React.Component {
   videoRef = React.createRef();
   canvasRef = React.createRef();
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
   componentDidMount() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       const webCamPromise = navigator.mediaDevices
@@ -69,13 +67,9 @@ class App extends React.Component {
     tf.engine().startScope();
     startTime = moment();
     model.executeAsync(this.process_input(video)).then((prediction) => {
-      console.log(prediction);
       var boxes = prediction[2].dataSync();
-
-      // console.log("boxesboxesboxes", boxes)
-
       boxes = _.map(boxes, function(value) {
-        return parseInt(value * 320);
+        return value;
       });
       boxes = _.chunk(boxes, 4);
 
@@ -89,19 +83,10 @@ class App extends React.Component {
         return retObj;
       });
       finalResponse = _.filter(finalResponse, function(obj) {
-        // var temp=obj.score >= threshold
         return obj.score >= threshold;
       });
-      console.log("TOTAL DETECTION:", finalResponse.length);
-      // console.log("TOTAL DETECTION:",finalResponse.length)
-
-      console.log(
-        "Response Time: ",
-        moment().diff(startTime, "ms") / 1000,
-        "Seconds"
-      );
-
-      // this.renderPredictions(prediction, video);
+      this.setState({ count: finalResponse.length });
+      this.renderPredictions(finalResponse, video);
       requestAnimationFrame(() => {
         startTime = moment();
         var reactApp = this;
@@ -119,33 +104,30 @@ class App extends React.Component {
     return expandedimg;
   }
 
-  buildDetectedObjects(scores, threshold, boxes, classes, classesDir) {
-    const detectionObjects = [];
+  buildDetectedObjects(response) {
     var video_frame = document.getElementById("frame");
 
-    scores[0].forEach((score, i) => {
-      if (score > threshold) {
-        const bbox = [];
-        const minY = boxes[0][i][0] * video_frame.offsetHeight;
-        const minX = boxes[0][i][1] * video_frame.offsetWidth;
-        const maxY = boxes[0][i][2] * video_frame.offsetHeight;
-        const maxX = boxes[0][i][3] * video_frame.offsetWidth;
-        bbox[0] = minX;
-        bbox[1] = minY;
-        bbox[2] = maxX - minX;
-        bbox[3] = maxY - minY;
-        detectionObjects.push({
-          class: classes[i],
-          label: classesDir[classes[i]].name,
-          score: score.toFixed(4),
-          bbox: bbox,
-        });
-      }
+    const detectionObjects = _.map(response, function(obj) {
+      const bbox = [];
+      const minY = obj.box[0] * video_frame.offsetHeight;
+      const minX = obj.box[1] * video_frame.offsetWidth;
+      const maxY = obj.box[2] * video_frame.offsetHeight;
+      const maxX = obj.box[3] * video_frame.offsetWidth;
+      bbox[0] = minX;
+      bbox[1] = minY;
+      bbox[2] = maxX - minX;
+      bbox[3] = maxY - minY;
+      return {
+        label: "Diamond",
+        score: obj.score,
+        bbox: bbox,
+      };
     });
+    console.log(detectionObjects);
     return detectionObjects;
   }
 
-  renderPredictions = (predictions) => {
+  renderPredictions = (response) => {
     const ctx = this.canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -154,17 +136,7 @@ class App extends React.Component {
     ctx.font = font;
     ctx.textBaseline = "top";
 
-    //Getting predictions
-    const boxes = predictions[4].arraySync();
-    const scores = predictions[5].arraySync();
-    const classes = predictions[6].dataSync();
-    const detections = this.buildDetectedObjects(
-      scores,
-      threshold,
-      boxes,
-      classes,
-      classesDir
-    );
+    const detections = this.buildDetectedObjects(response);
 
     detections.forEach((item) => {
       const x = item["bbox"][0];
@@ -221,6 +193,7 @@ class App extends React.Component {
           width="320"
           height="320"
         />
+        <h5>Count: {this.state.count} </h5>
       </div>
     );
   }
