@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as tf from "@tensorflow/tfjs";
+import _ from "lodash";
+import moment from "moment";
 import "./styles.css";
 tf.setBackend("webgl");
 
-const threshold = 0.02;
+const threshold = 0.4;
+var startTime = moment();
+var diamondcount = 0;
 
 // async function load_model() {
 //   const model = await loadGraphModel(
@@ -30,7 +34,6 @@ let classesDir = {
 class App extends React.Component {
   videoRef = React.createRef();
   canvasRef = React.createRef();
-
   componentDidMount() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       const webCamPromise = navigator.mediaDevices
@@ -64,13 +67,54 @@ class App extends React.Component {
 
   detectFrame = (video, model) => {
     tf.engine().startScope();
-    model.executeAsync(this.process_input(video)).then((predictions) => {
-      console.log(predictions)
-      // this.renderPredictions(predictions, video);
-      // requestAnimationFrame(() => {
-      //   this.detectFrame(video, model);
-      // });
-      // tf.engine().endScope();
+    startTime = moment();
+    model.executeAsync(this.process_input(video)).then((prediction) => {
+      console.log(prediction);
+      var boxes = prediction[2].dataSync();
+
+      // console.log("boxesboxesboxes", boxes)
+
+      boxes = _.map(boxes, function(value) {
+        return parseInt(value * 320);
+      });
+      boxes = _.chunk(boxes, 4);
+
+      var scores = prediction[6].dataSync();
+
+      var finalResponse = _.map(scores, function(score, key) {
+        var retObj = {
+          score: score,
+          box: boxes[key],
+        };
+        return retObj;
+      });
+      finalResponse = _.filter(finalResponse, function(obj) {
+        // var temp=obj.score >= threshold
+        return obj.score >= threshold;
+      });
+      console.log("TOTAL DETECTION:", finalResponse.length);
+      // console.log("TOTAL DETECTION:",finalResponse.length)
+      var i;
+      for (i = 0; i < finalResponse.length; i++) {
+        console.log(
+          "Diamond " + (i + 1) + " with Score: " + finalResponse[i].score
+        );
+        console.log("Box Coordinates:" + finalResponse[i].box);
+        console.log("------------------------------------");
+      }
+
+      console.log(
+        "Response Time: ",
+        moment().diff(startTime, "ms") / 1000,
+        "Seconds"
+      );
+
+      // this.renderPredictions(prediction, video);
+      requestAnimationFrame(() => {
+        startTime = moment();
+        this.detectFrame(video, model);
+      });
+      tf.engine().endScope();
     });
   };
 
