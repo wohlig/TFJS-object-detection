@@ -157,21 +157,21 @@ class App extends React.Component {
         <h1>Terracor Real-Time Diamond Count</h1>
         <h5>Count: {this.state.count} </h5>
         <video
-          style={{ height: "500px", width: "500px" }}
+          style={{ height: "600px", width: "800px" }}
           className="size"
           autoPlay
           playsInline
           muted
           ref={this.videoRef}
-          width="500"
-          height="500"
+          width="800"
+          height="600"
           id="frame"
         />
         <canvas
           className="size"
           ref={this.canvasRef}
-          width="500"
-          height="500"
+          width="800"
+          height="600"
         />
       </div>
     );
