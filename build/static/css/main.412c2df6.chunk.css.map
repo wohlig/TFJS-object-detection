@@ -1,0 +1,1 @@
+{"version":3,"sources":["/Users/chintan/Documents/GitHub/TFJS-object-detection/src/styles.css","main.412c2df6.chunk.css"],"names":[],"mappings":"AAAA,MACE,cAAA,CACA,SAAA,CACA,SCCF","file":"main.412c2df6.chunk.css","sourcesContent":[".size {\n  position: fixed;\n  top: 100px;\n  left: 10px;\n}\n",".size {\n  position: fixed;\n  top: 100px;\n  left: 10px;\n}\n\n"]}
