@@ -1,5 +1,3 @@
 .size {
-  position: fixed;
-  top: 100px;
-  left: 10px;
+  position: absolute;
 }

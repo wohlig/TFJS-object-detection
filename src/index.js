@@ -38,8 +38,8 @@ class App extends React.Component {
           audio: false,
           video: {
             facingMode: "environment",
-            width: 800,
-            height: 600,
+            width: 320,
+            height: 320,
           },
         })
         .then((stream) => {
@@ -167,25 +167,28 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Terracor Real-Time Diamond Count</h1>
+        <h1>Terra Cor Diamonds</h1>
+        <h3>RealTime Count</h3>
         <h5>Count: {this.state.count} </h5>
-        <video
-          style={{ height: "600px", width: "800px" }}
-          className="size"
-          autoPlay
-          playsInline
-          muted
-          ref={this.videoRef}
-          width="800"
-          height="600"
-          id="frame"
-        />
-        <canvas
-          className="size"
-          ref={this.canvasRef}
-          width="800"
-          height="600"
-        />
+        <div style={{ position: "relative" }}>
+          <video
+            style={{ height: "320px", width: "320px" }}
+            className="size"
+            autoPlay
+            playsInline
+            muted
+            ref={this.videoRef}
+            width="320"
+            height="320"
+            id="frame"
+          />
+          <canvas
+            className="size"
+            ref={this.canvasRef}
+            width="320"
+            height="320"
+          />
+        </div>
       </div>
     );
   }
