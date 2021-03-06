@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as tf from "@tensorflow/tfjs";
-import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import "./styles.css";
 tf.setBackend("webgl");
 
@@ -15,7 +14,7 @@ const threshold = 0.02;
 // }
 
 async function load_model() {
-  const model = await loadGraphModel(
+  const model = await tf.loadGraphModel(
     "https://raw.githubusercontent.com/wohlig/TFJS-object-detection/master/models/diamond-detector/model.json"
   );
   return model;
@@ -66,11 +65,12 @@ class App extends React.Component {
   detectFrame = (video, model) => {
     tf.engine().startScope();
     model.executeAsync(this.process_input(video)).then((predictions) => {
-      this.renderPredictions(predictions, video);
-      requestAnimationFrame(() => {
-        this.detectFrame(video, model);
-      });
-      tf.engine().endScope();
+      console.log(predictions)
+      // this.renderPredictions(predictions, video);
+      // requestAnimationFrame(() => {
+      //   this.detectFrame(video, model);
+      // });
+      // tf.engine().endScope();
     });
   };
 
@@ -172,15 +172,15 @@ class App extends React.Component {
           playsInline
           muted
           ref={this.videoRef}
-          width="600"
-          height="500"
+          width="320"
+          height="320"
           id="frame"
         />
         <canvas
           className="size"
           ref={this.canvasRef}
-          width="600"
-          height="500"
+          width="320"
+          height="320"
         />
       </div>
     );
