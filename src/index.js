@@ -7,8 +7,8 @@ import "./styles.css";
 tf.setBackend("webgl");
 
 const threshold = 0.4;
-var predictionArrayNumber = 2;
-var scoresArrayNumber = 6;
+var predictionArrayNumber = 817;
+var scoresArrayNumber = 841;
 
 // async function load_model() {
 //   const model = await loadGraphModel(
