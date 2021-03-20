@@ -7,6 +7,8 @@ import "./styles.css";
 tf.setBackend("webgl");
 
 const threshold = 0.4;
+var predictionArrayNumber = 2;
+var scoresArrayNumber = 6;
 
 // async function load_model() {
 //   const model = await loadGraphModel(
@@ -25,6 +27,7 @@ async function load_model() {
 class App extends React.Component {
   videoRef = React.createRef();
   canvasRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -67,13 +70,13 @@ class App extends React.Component {
   detectFrame = (video, model) => {
     tf.engine().startScope();
     model.executeAsync(this.process_input(video)).then((prediction) => {
-      var boxes = prediction[2].dataSync();
+      var boxes = prediction[predictionArrayNumber].dataSync();
       boxes = _.map(boxes, function(value) {
         return value;
       });
       boxes = _.chunk(boxes, 4);
 
-      var scores = prediction[6].dataSync();
+      var scores = prediction[scoresArrayNumber].dataSync();
 
       var finalResponse = _.map(scores, function(score, key) {
         var retObj = {
