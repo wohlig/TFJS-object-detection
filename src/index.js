@@ -7,8 +7,8 @@ import "./styles.css";
 tf.setBackend("webgl");
 
 const threshold = 0.4;
-var predictionArrayNumber = 817;
-var scoresArrayNumber = 841;
+var predictionArrayNumber = 0;
+var scoresArrayNumber = 7;
 
 // async function load_model() {
 //   const model = await loadGraphModel(
@@ -19,7 +19,7 @@ var scoresArrayNumber = 841;
 
 async function load_model() {
   const model = await tf.loadGraphModel(
-    "https://raw.githubusercontent.com/wohlig/TFJS-object-detection/master/models/diamond_detector_620/model.json"
+    "https://raw.githubusercontent.com/wohlig/TFJS-object-detection/master/models/diamond_detector_320_2000/model.json"
   );
   return model;
 }
